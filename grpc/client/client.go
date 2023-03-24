@@ -13,7 +13,7 @@ type GRPCClient struct {
 	auth    pbAuth.AuthClient
 	httpLog pbLog.LogServiceClient
 	book    pbBook.BookServiceClient
-	user pbUser.UserServiceClient
+	user    pbUser.UserServiceClient
 }
 
 // NewGRPCClient is constructor
@@ -22,6 +22,6 @@ func NewGRPCClient(userServiceConn grpc.ClientConnInterface, bookServiceConn grp
 		auth:    pbAuth.NewAuthClient(userServiceConn),
 		httpLog: pbLog.NewLogServiceClient(userServiceConn),
 		book:    pbBook.NewBookServiceClient(bookServiceConn),
-		user: pbUser.NewUserServiceClient(userServiceConn),
+		user:    pbUser.NewUserServiceClient(userServiceConn),
 	}
 }
