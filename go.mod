@@ -7,6 +7,7 @@ require (
 	github.com/joho/godotenv v1.5.1
 	github.com/urfave/cli/v2 v2.25.0
 	github.com/yonisaka/protobank v1.0.8
+	golang.org/x/sync v0.1.0
 	google.golang.org/grpc v1.54.0
 	gorm.io/driver/postgres v1.5.0
 	gorm.io/gorm v1.24.7-0.20230306060331-85eaf9eeda11

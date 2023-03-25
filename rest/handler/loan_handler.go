@@ -9,6 +9,7 @@ import (
 	"github.com/yonisaka/loan-service/rest/dto"
 	pbBook "github.com/yonisaka/protobank/book"
 	pbUser "github.com/yonisaka/protobank/user"
+	"golang.org/x/sync/errgroup"
 )
 
 type LoanHandler struct {
@@ -46,16 +47,19 @@ func (r *LoanHandler) CreateLoan(c *gin.Context) {
 		return
 	}
 	
-	_, err := r.client.GetUser(c, &pbUser.UserByIDRequest{Id: int64(req.UserID)})
-	if err != nil {
-		c.AbortWithStatusJSON(
-			http.StatusNotFound,
-			*dto.NewResponse().WithCode(http.StatusNotFound).WithMessage(err.Error()),
-		)
-		return
-	}
+	group, _ := errgroup.WithContext(c)
+	
+	group.Go(func() error {
+		_, err := r.client.GetUser(c, &pbUser.UserByIDRequest{Id: int64(req.UserID)})
+		return err
+	})
 
-	_, err = r.client.GetBook(c, &pbBook.BookByIDRequest{Id: int64(req.BookID)})
+	group.Go(func() error {
+		_, err := r.client.GetBook(c, &pbBook.BookByIDRequest{Id: int64(req.BookID)})
+		return err
+	})
+
+	err := group.Wait()
 	if err != nil {
 		c.AbortWithStatusJSON(
 			http.StatusNotFound,
